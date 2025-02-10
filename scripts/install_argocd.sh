@@ -23,18 +23,12 @@ if ! kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-
   exit 1
 fi
 
-echo "Expondo ArgoCD via NodePort..."
-if ! kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "NodePort"}}'; then
-  echo "Erro ao expor o ArgoCD via NodePort." >&2
-  exit 1
-fi
-
 echo "Baixando a CLI do ArgoCD..."
-if ! curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64; then
+if ! sudo curl -sSL -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/latest/download/argocd-linux-amd64; then
   echo "Erro ao baixar a CLI do ArgoCD." >&2
   exit 1
 fi
-chmod +x /usr/local/bin/argocd
+sudo chmod +x /usr/local/bin/argocd
 
 echo "Aguardando o ArgoCD subir (pode levar alguns instantes)..."
 sleep 30

@@ -28,6 +28,7 @@ k3s-argocd-setup/
 │   ├── install_k3s.sh
 │   ├── install_argocd.sh
 │   ├── deploy_apps.sh
+│   ├── purge_k3s.sh      # Script para desinstalar completamente o K3s
 └── install.sh
 └── README.md             # Documentação do projeto
 ```
@@ -37,8 +38,8 @@ k3s-argocd-setup/
 Para instalar todo o ambiente (K3s, ArgoCD, Nginx e MetalLB), basta executar:
 
 ```bash
-chmod +x scripts/install.sh
-./scripts/install.sh
+chmod +x install.sh
+./install.sh
 ```
 
 Este script executa os seguintes passos:
@@ -72,6 +73,13 @@ chmod +x scripts/deploy_apps.sh
 ./scripts/deploy_apps.sh
 ```
 
+### 🗑️ Desinstalar K3s
+
+```bash
+chmod +x scripts/purge_k3s.sh
+./scripts/purge_k3s.sh
+```
+
 ## 📌 Acesso ao ArgoCD
 
 Após a instalação, você pode acessar a interface do ArgoCD:
@@ -82,8 +90,14 @@ Após a instalação, você pode acessar a interface do ArgoCD:
    kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
    ```
 
-2. Acesse o painel web do ArgoCD:
-   - URL: `https://<IP_DO_CLUSTER>:<PORTA_NODEPORT>`
+2. Execute o comando de port-forward para acessar o painel web do ArgoCD:
+
+   ```bash
+   kubectl port-forward svc/argocd-server -n argocd 8080:443
+   ```
+
+3. Acesse o painel web do ArgoCD:
+   - URL: `https://localhost:8080`
 
 ## 🔧 Personalização
 

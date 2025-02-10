@@ -13,10 +13,28 @@ check_command() {
 # Verifica se o curl está instalado
 check_command curl
 
+# Verifica se o parâmetro is_worker foi passado
+IS_WORKER=false
+if [ "${1:-}" == "--worker" ]; then
+  echo "Instalando o K3s como worker..."
+  IS_WORKER=true
+fi
+
 echo "Instalando K3s..."
-if ! curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644; then
-  echo "Erro ao instalar o K3s. Verifique sua conexão com a internet e tente novamente." >&2
-  exit 1
+if [ "$IS_WORKER" = true ]; then
+  if [ -z "${K3S_URL:-}" ] || [ -z "${K3S_TOKEN:-}" ]; then
+    echo "Erro: As variáveis K3S_URL e K3S_TOKEN devem estar definidas para instalar como worker." >&2
+    exit 1
+  fi
+  if ! curl -sfL https://get.k3s.io | K3S_URL=$K3S_URL K3S_TOKEN=$K3S_TOKEN sh -s - --write-kubeconfig-mode 644; then
+    echo "Erro ao instalar o K3s como worker. Verifique sua conexão com a internet e tente novamente." >&2
+    exit 1
+  fi
+else
+  if ! curl -sfL https://get.k3s.io | sh -s - --write-kubeconfig-mode 644; then
+    echo "Erro ao instalar o K3s. Verifique sua conexão com a internet e tente novamente." >&2
+    exit 1
+  fi
 fi
 
 echo "Exportando variável KUBECONFIG..."
