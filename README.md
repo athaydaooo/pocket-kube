@@ -1,4 +1,4 @@
-# Pocket-Kuve
+# Pocket-Kube
 
 Este repositório contém scripts e manifestos para instalar e configurar um ambiente Kubernetes utilizando **K3s**, **ArgoCD**, **Nginx** e **MetalLB**. Os scripts foram desenvolvidos seguindo boas práticas para facilitar a identificação e resolução de erros comuns.
 
