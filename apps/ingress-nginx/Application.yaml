@@ -11,6 +11,9 @@ spec:
     repoURL: https://charts.bitnami.com/bitnami
     targetRevision: latest
     chart: nginx
+    helm:
+      valueFiles:
+        - values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: nginx

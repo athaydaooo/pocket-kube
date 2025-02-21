@@ -11,6 +11,9 @@ spec:
     repoURL: https://metallb.github.io/metallb
     targetRevision: latest
     chart: metallb
+    helm:
+      valueFiles:
+        - values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: metallb
