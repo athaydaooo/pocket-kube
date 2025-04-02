@@ -19,7 +19,7 @@ if ! kubectl apply -f "apps/metallb/Application.yaml"; then
   exit 1
 fi
 
-sleep 20
+sleep 30
 
 echo "Configurando o MetalLB IPAddressPool..."
 if ! kubectl apply -f "apps/metallb/IPAddressPool.yaml"; then
