@@ -1,22 +1,23 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: nginx
-  namespace: argocd
-  labels:
-    app.kubernetes.io/name: nginx
+  name: ingress-nginx # Nome do aplicativo (altere se necessário)
+  namespace: argocd # Namespace do ArgoCD (não altere)
 spec:
   project: default
   source:
-    repoURL: https://charts.bitnami.com/bitnami
-    targetRevision: latest
-    chart: nginx
+    repoURL: https://kubernetes.github.io/ingress-nginx # Repositório Helm oficial
+    targetRevision: 4.8.3 # ✅ Use uma versão específica (não "latest")
+    chart: ingress-nginx # Nome do chart Helm
     helm:
-      valueFiles:
-        - values.yaml
+      values: | # Valores mínimos recomendados
+        controller:
+          service:
+            type: LoadBalancer
+          kind: DaemonSet
   destination:
     server: https://kubernetes.default.svc
-    namespace: nginx
+    namespace: ingress-nginx # Namespace onde o NGINX será instalado
   syncPolicy:
     automated:
       prune: true

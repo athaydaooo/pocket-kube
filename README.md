@@ -35,6 +35,51 @@ k3s-argocd-setup/
 
 ## 🚀 Instalação Completa
 
+O primeiro passo é definir um bloco de IPs privados e acessiveis pela maquina em apps/metallb/IPAddressPool.yaml.
+
+Esses IPs serão atribuidos às suas aplicações pelo nginx
+
+```bash
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  labels:
+    argocd.argoproj.io/instance: metallb
+  name: default-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    - 172.29.223.254/32 # Altere o bloco de ip para um acessivel na sua maquina
+```
+
+Agora defina o dominio do ArgoCD em seu arquivo de ingress em apps/argocd/ingress.yaml
+
+```bash
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: argocd-ingress
+  namespace: argocd
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: devops.pocket-kube.com #Altere para o dominio configurado em sua maquina
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: argocd-server
+                port:
+                  number: 443
+
+```
+
 Para instalar todo o ambiente (K3s, ArgoCD, Nginx e MetalLB), basta executar:
 
 ```bash

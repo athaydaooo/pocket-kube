@@ -19,8 +19,16 @@ if ! kubectl apply -f "apps/metallb/Application.yaml"; then
   exit 1
 fi
 
-echo "Configurando o MetalLB..."
-if ! kubectl apply -f "apps/metallb/addresspool.yaml"; then
+sleep 20
+
+echo "Configurando o MetalLB IPAddressPool..."
+if ! kubectl apply -f "apps/metallb/IPAddressPool.yaml"; then
+  echo "Erro ao aplicar a configuração do MetalLB. Verifique o manifesto." >&2
+  exit 1
+fi
+
+echo "Configurando o MetalLB L2Advertisement..."
+if ! kubectl apply -f "apps/metallb/L2Advertisement.yaml"; then
   echo "Erro ao aplicar a configuração do MetalLB. Verifique o manifesto." >&2
   exit 1
 fi

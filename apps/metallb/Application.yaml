@@ -3,20 +3,18 @@ kind: Application
 metadata:
   name: metallb
   namespace: argocd
-  labels:
-    app.kubernetes.io/name: metallb
 spec:
   project: default
   source:
     repoURL: https://metallb.github.io/metallb
-    targetRevision: latest
+    targetRevision: 0.13.12
     chart: metallb
     helm:
       valueFiles:
         - values.yaml
   destination:
     server: https://kubernetes.default.svc
-    namespace: metallb
+    namespace: metallb-system
   syncPolicy:
     automated:
       prune: true

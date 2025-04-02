@@ -1,0 +1,10 @@
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  labels:
+    argocd.argoproj.io/instance: metallb
+  name: default-pool
+  namespace: metallb-system
+spec:
+  addresses:
+    - 172.29.223.254/32

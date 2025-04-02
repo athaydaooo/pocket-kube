@@ -33,4 +33,10 @@ sudo chmod +x /usr/local/bin/argocd
 echo "Aguardando o ArgoCD subir (pode levar alguns instantes)..."
 sleep 30
 
+echo "Configurando o ArgoCD ingress..."
+if ! kubectl apply -f "apps/argocd/ingress.yaml"; then
+  echo "Erro ao aplicar a configuração de Ingress Argocd. Verifique o manifesto." >&2
+  exit 1
+fi
+
 echo "Instalação do ArgoCD concluída! ✅"
